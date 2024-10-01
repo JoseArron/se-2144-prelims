@@ -30,6 +30,8 @@ const turnOn = (): void => {
   clear()
   if (currentDisplay) {
     currentDisplay.textContent = '0'
+    canAddOperator = true
+    canAddDecimal = true
     displayElement.classList.remove('display--off')
   }
 }
