@@ -90,7 +90,7 @@ const handleOperatorInput = (op: string): void => {
     currentDisplay.textContent += op
     canAddDecimal = true
     canAddOperator = false
-    if (op === '×') {
+    if (op === 'x') {
       expression += '*'
     } else if (op === '÷') {
       expression += '/'
