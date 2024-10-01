@@ -105,7 +105,7 @@ const handleEqualInput = (): void => {
   if (!isOn) return
   const result = compute(expression)
   if (previousDisplay) previousDisplay.textContent = currentDisplay.textContent
-  currentDisplay.textContent = result.toString().slice(0, 8)
+  currentDisplay.textContent = result.toString().slice(0, 12)
   if (typeof result === 'string') {
     expression = 'Error'
   }
