@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/png" href="/backspace.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+  </head>
+  <body>
+    <div class="app"></div>
+    <div class="calculator">
+      <div class="calculator__header"></div>
+      <div class="calculator__body">
+        <div class="display display--off">
+          <div class="display__previous" id="previous-display"></div>
+          <div class="display__current" id="current-display"></div>
+        </div>
+        <div class="keypad"> 
+          <div class="keypad__grid">
+            <button class="special-key hello-key" id="hello-key">hello</button>
+            <button class="special-key bye-key" id="bye-key">bye</button>
+
+            <button class="clear-key">AC</button>
+            <button class="backspace-key"><img src="/backspace.png"></button>
+            <button class="operator-key divide-key">÷</button>
+            <button class="operator-key multiply-key">x</button>
+            
+            <button class="number-key">7</button>
+            <button class="number-key">8</button>
+            <button class="number-key">9</button>
+            <button class="operator-key add-key">+</button>
+            
+            <button class="number-key">4</button>
+            <button class="number-key">5</button>
+            <button class="number-key">6</button>
+            <button class="operator-key subtract-key">-</button>
+
+            <button class="number-key">1</button>
+            <button class="number-key">2</button>
+            <button class="number-key">3</button>
+            <button class="equal-key">=</button>
+
+            <button class="number-key zero-key">0</button>
+            <button class="decimal-key">.</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
