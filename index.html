@@ -15,17 +15,17 @@
     <div class="calculator">
       <div class="calculator__header"></div>
       <div class="calculator__body">
-        <div class="display display--off">
-          <div class="display__previous" id="previous-display"></div>
-          <div class="display__current" id="current-display"></div>
+        <div class="display">
+          <div class="display__section" id="expression-display"></div>
+          <div class="display__section" id="result-display"></div>
         </div>
         <div class="keypad"> 
           <div class="keypad__grid">
             <button class="special-key hello-key" id="hello-key">hello</button>
             <button class="special-key bye-key" id="bye-key">bye</button>
 
-            <button class="clear-key">AC</button>
-            <button class="backspace-key"><img src="/backspace.png"></button>
+            <button class="clear-key" id="clear-key">AC</button>
+            <button class="backspace-key" id="backspace-key"><img src="/backspace.png"></button>
             <button class="operator-key divide-key">÷</button>
             <button class="operator-key multiply-key">x</button>
             
@@ -42,10 +42,10 @@
             <button class="number-key">1</button>
             <button class="number-key">2</button>
             <button class="number-key">3</button>
-            <button class="equal-key">=</button>
 
+            <button class="equal-key" id="equal-key">=</button>
             <button class="number-key zero-key">0</button>
-            <button class="decimal-key">.</button>
+            <button class="decimal-key" id="decimal-key">.</button>
           </div>
         </div>
       </div>
