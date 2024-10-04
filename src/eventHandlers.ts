@@ -1,3 +1,4 @@
+import { Operators } from "./enums"
 import Calculator from "./models/calculator"
 
 export const handleHello = (calculator: Calculator) => {
@@ -27,7 +28,10 @@ export const handleNumberInput = (number: string, calculator: Calculator): void 
   }
 
 export const handleOperatorInput = (operator: string, calculator: Calculator): void => {
-    if (!calculator.isOn || !calculator.canAddOperator) return
+    if (!calculator.isOn) return
+    if (!calculator.canAddOperator && operator == Operators.SUBTRACT) {
+        calculator.appendNegative()
+    }
     calculator.appendOperator(operator)
   }
 
