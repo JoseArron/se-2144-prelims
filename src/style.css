@@ -173,6 +173,10 @@ button:target {
     font-size: 1rem;
   }
 
+  .display__section--active {
+    font-size: 1.2rem;
+  }
+
   .keypad__grid {
     gap: 0.5rem;
   }

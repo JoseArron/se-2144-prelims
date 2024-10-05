@@ -68,6 +68,10 @@ class Calculator {
         return this._canAddOperator
     }
 
+    private get activeDisplay(): HTMLDivElement {
+        return this._activeDisplay
+    }
+
     private set isOn(input: boolean) {
         this._isOn = input
     }
@@ -78,6 +82,10 @@ class Calculator {
 
     private set expression(input: Expression) {
         this._expression = input
+    }
+
+    private set decimalIndices(input: number[]) {
+        this._decimalIndices = input
     }
 
     private set canAddDecimal(input: boolean) {
@@ -103,6 +111,7 @@ class Calculator {
     clear(): void {
         this.result = ''
         this.expression = [0]
+        this.decimalIndices = []
         this.canAddDecimal = true
         this.canAddOperator = false
         this.updateDisplay()
@@ -133,27 +142,38 @@ class Calculator {
             this.activeDisplay = this.expressionDisplay
             this.expression.pop()
             this.expression.push(Number(input_number))
+            this.canAddOperator = true
         } 
 
         else if (this.expressionDisplay.textContent.length < MAX_CHARACTERS && this.canAddOperator == false) {
             this.expression.push(Number(input_number))
             this.canAddOperator = true
-            this.result = parseExpression(this.expression)
         }
 
         else if (this.expressionDisplay.textContent.length < MAX_CHARACTERS) {
             this.activeDisplay = this.expressionDisplay
             var lastNumber = this.expression[this.expression.length - 1]
             if (typeof lastNumber == 'number') {
-                this.expression[this.expression.length - 1] = Number(lastNumber.toString() + input_number)
+                console.log("decimalIndices:", this.decimalIndices, "expression:", this.expression)
+                if (lastNumber.toString().length == this.decimalIndices[(this.expression.length - 1)/2]) {
+                    this.expression[this.expression.length - 1] = Number(lastNumber.toString() + '.' + input_number)
+                }
+                else if (input_number == '0' && lastNumber.toString().length >= this.decimalIndices[(this.expression.length - 1)/2]) {
+                    this.expression[this.expression.length - 1] = Number(lastNumber.toString()) + .00000001
+                }
+                else {
+                    this.expression[this.expression.length - 1] = Number(lastNumber.toString() + input_number)
+                }
             }
+        }
 
+        if (this.expression.length > 1) {
             this.result = parseExpression(this.expression)
         }
 
         if (this.result.toString().length > MAX_CHARACTERS) {
             if (typeof this.result !== 'number') return
-            this.result = parseFloat(this.result.toPrecision(MAX_CHARACTERS))
+            this.result = parseFloat(this.result.toFixed(MAX_CHARACTERS - this.result.toString().split('.')[0].length))
         }
 
         console.log(this.expression)
@@ -164,33 +184,49 @@ class Calculator {
     appendOperator(input_operator: string): void {
         if (!this.expressionDisplay.textContent) return
 
-        if (this.expressionDisplay.textContent.length >= MAX_CHARACTERS) return
+        if (this.activeDisplay === this.resultDisplay) {
+            this.expression = [<number>this.result]
+            this.expression.push(input_operator as Operators)
+            this.result = ''
+            this.canAddDecimal = true
+            this.canAddOperator = false
+            this.activeDisplay = this.expressionDisplay
+            this.updateDisplay()
+        }
 
-        this.expression.push(input_operator as Operators)
-        this.canAddDecimal = true
-        this.canAddOperator = false
-        this.updateDisplay()
+        else if (this.expressionDisplay.textContent.length < MAX_CHARACTERS) {
+            this.expression.push(input_operator as Operators)
+            this.canAddDecimal = true
+            this.canAddOperator = false
+            this.updateDisplay()
+        }
     }
 
     appendDecimal(): void {
         if (!this.expressionDisplay.textContent) return
-        
-        if (this.expressionDisplay.textContent.length < MAX_CHARACTERS && this.canAddOperator == false) {
-            this.activeDisplay = this.expressionDisplay
-            this.expressionDisplay.textContent += '0.'
-            this.canAddDecimal = false
-            this.decimalIndices.push(1)
-        }
 
-        else if (this.expressionDisplay.textContent.length < MAX_CHARACTERS) {
+        if (this.expressionDisplay.textContent.length < MAX_CHARACTERS) {
             this.activeDisplay = this.expressionDisplay
-            this.expressionDisplay.textContent += '.'
+
+            if (this.expressionDisplay.textContent == '0') this.expressionDisplay.textContent = '0.'
+            else if (!this.canAddOperator) this.expressionDisplay.textContent += '0.'
+            else this.expressionDisplay.textContent += '.'
+
             this.canAddDecimal = false
             const copy = [...this.expression]
+
             var lengthBefore = 0
-            copy.slice(0, -2).forEach((item) => lengthBefore += item.toString().length)
+            copy.slice(0, -1).forEach((item) => {
+                lengthBefore += item.toString().length
+            })
+            console.log("lengthBefore:", lengthBefore)
+
+            var index = (((this.expression.length - 1) / 2 ))
+            console.log("index:", index)
+
             const decimalIndex = this.expressionDisplay.textContent.length - 1 - lengthBefore
-            this.decimalIndices.push(decimalIndex)
+            console.log("decimalIndex:", decimalIndex)
+            this.decimalIndices[index] = decimalIndex
         }
     }
 

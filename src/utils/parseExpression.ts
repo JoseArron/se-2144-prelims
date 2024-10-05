@@ -11,7 +11,7 @@ export const parseExpression = (expression: Expression): number | string => {
     const addIndex = expressionCopy.indexOf(Operators.ADD)
     const subtractIndex = expressionCopy.indexOf(Operators.SUBTRACT)
 
-    if (divideIndex !== -1 && divideIndex) {
+    if (divideIndex !== -1) {
         answer = calculate(<number>expressionCopy[divideIndex - 1], Operators.DIVIDE, <number>expressionCopy[divideIndex + 1])
         expressionCopy[divideIndex-1] = answer
         expressionCopy.splice(divideIndex, 2)

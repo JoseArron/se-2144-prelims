@@ -32,6 +32,8 @@ export const handleOperatorInput = (operator: string, calculator: Calculator): v
     if (!calculator.canAddOperator && operator == Operators.SUBTRACT) {
         calculator.appendNegative()
     }
+    if (!calculator.canAddOperator) return
+    
     calculator.appendOperator(operator)
   }
 
