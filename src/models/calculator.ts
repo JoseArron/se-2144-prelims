@@ -120,11 +120,11 @@ class Calculator {
         this.expressionInput = ['0']
         this.canAddDecimal = true
         this.canAddOperator = true
+        this.polarity = 1
         this.updateDisplay(this.expressionDisplay)
     }
 
     turnOff(): void {
-        console.log('Turning off...')
         this.isOn = false
         this.isInputDisabled = false
         this.clear()
@@ -259,6 +259,9 @@ class Calculator {
 
         if (removedCharacter === '.') {
             this.canAddDecimal = true
+        } else if (this.expressionInput.slice(-2, -1).every((item) => isOperator(item)) && removedCharacter === '-') {
+            this.polarity = 1
+            this.canAddOperator = false
         } else if (isOperator(removedCharacter)) {
             this.canAddOperator = true
         }
