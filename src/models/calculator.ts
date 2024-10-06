@@ -72,6 +72,10 @@ class Calculator {
         this._isOn = input
     }
 
+    private set isInputDisabled(input: boolean) {
+        this._isInputDisabled = input
+    }
+
     private set result(input: Result) {
         this._result = input
     }
@@ -111,6 +115,7 @@ class Calculator {
     turnOff(): void {
         console.log('Turning off...')
         this.isOn = false
+        this.isInputDisabled = false
         this.clear()
         this.displayElement.classList.add('display--off')
     }
@@ -184,6 +189,8 @@ class Calculator {
     }
 
     displayResult(setActive: boolean): void {
+        if (this.expressionInput.length === 0) return
+
         const expression: Expression = parseExpression(this.expressionInput)
         this.result = evaluate(expression)
 
@@ -205,6 +212,7 @@ class Calculator {
     }
 
     displayBye(): void {
+        this.isInputDisabled = true
         this.result = 'Goodbye'
         this.expressionInput = []
         this.updateDisplay(this.resultDisplay)
@@ -212,7 +220,7 @@ class Calculator {
     }
 
     backspace(): void {
-        if (!this.expressionDisplay.textContent) return
+        if (this.expressionInput.length === 0) return
 
         var lastItem = this.expressionInput[this.expressionInput.length - 1]
         var removedCharacter = lastItem.slice(-1)
