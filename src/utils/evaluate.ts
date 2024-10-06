@@ -1,20 +1,38 @@
 import { Operator } from "../enums"
-import { Expression } from "../types"
+import { Expression, Result } from "../types"
 
-const evaluate = (expression: Expression): number | string => {
+/**
+ * Evaluate an expression
+ * @param  {Expression} expression- The parsed expression to evaluate
+ * @returns {Result} - The result of the expression
+ */
+const evaluate = (expression: Expression): Result => {
     var answer: number
+    // Copy the expression to avoid mutating the original array
     const expressionCopy = [...expression]
 
     console.log(expressionCopy)
 
+    // Find the index of each operator in the expression
     const divideIndex = expressionCopy.indexOf(Operator.DIVIDE)
     const multiplyIndex = expressionCopy.indexOf(Operator.MULTIPLY)
     const addIndex = expressionCopy.indexOf(Operator.ADD)
     const subtractIndex = expressionCopy.indexOf(Operator.SUBTRACT)
 
+    // If the expression has only one element, return it
     if (expressionCopy.length === 1) {
         return expressionCopy[0]
     }
+
+    /**
+     * If the expression has more than one element, evaluate the expression
+     * based on the order of operations (PEMDAS)
+     * 
+     * Look for the operator in the expression
+     * Calculate the result of the expression with the numbers on either side of the operator
+     * Replace the operator and the numbers in the expression with the result
+     * Repeat until the expression has only one element
+     */
 
     if (divideIndex !== -1) {
         answer = calculate(<number>expressionCopy[divideIndex - 1], Operator.DIVIDE, <number>expressionCopy[divideIndex + 1])
@@ -55,6 +73,13 @@ const evaluate = (expression: Expression): number | string => {
     return expressionCopy[0]
 }
 
+/**
+ * Calculate the result of an expression
+ * @param  {number} leftOperand - The left operand
+ * @param  {Operator} operator - The operator
+ * @param  {number} rightOperand - The right operand
+ * @returns {number} - The result of the calculation
+ */
 const calculate = (leftOperand: number, operator: Operator, rightOperand: number) => {
     switch(operator) {
         case Operator.ADD:
