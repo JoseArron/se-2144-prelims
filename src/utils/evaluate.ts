@@ -2,9 +2,7 @@ import { Operator } from "../enums"
 import { Expression } from "../types"
 
 const evaluate = (expression: Expression): number | string => {
-
-    var answer : number
-
+    var answer: number
     const expressionCopy = [...expression]
 
     console.log(expressionCopy)

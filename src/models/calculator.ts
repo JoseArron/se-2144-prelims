@@ -1,6 +1,7 @@
 import { Operator } from "../enums"
 import { Expression, ExpressionInput, Result } from "../types"
 import evaluate from "../utils/evaluate"
+import isOperator from "../utils/isOperator"
 import parseExpression from "../utils/parseExpression"
 
 const MAX_CHARACTERS = 12
@@ -137,14 +138,14 @@ class Calculator {
 
         if (this.expressionDisplay.textContent.length > MAX_CHARACTERS) return
         
-        if (this.expressionInput[this.expressionInput.length - 1].startsWith('0')) {
+        if (this.expressionInput[this.expressionInput.length - 1].startsWith('0') && this.expressionInput[this.expressionInput.length - 1].length === 1) {
             this.expressionInput[this.expressionInput.length - 1] = inputNumber
-        }
-
-        else if (!this.canAddOperator) {
+        } else if (!this.canAddOperator) {
             this.expressionInput.push(inputNumber)
             this.canAddOperator = true
-        } else this.expressionInput[this.expressionInput.length - 1] += inputNumber
+        } else {
+            this.expressionInput[this.expressionInput.length - 1] += inputNumber
+        }
         
         if (this.expressionInput.length > 1) {
             this.displayResult(false)
@@ -176,6 +177,7 @@ class Calculator {
 
         if (!this.canAddOperator) {
             this.expressionInput.push('0.')
+            this.canAddOperator = true
         } else {
             this.expressionInput[this.expressionInput.length - 1] += '.'
         }
@@ -196,6 +198,10 @@ class Calculator {
 
         if (this.result.toString().length > MAX_CHARACTERS && typeof this.result === 'number') {
             this.result = Number(this.result.toFixed(MAX_CHARACTERS - this.result.toString().split('.')[0].length - 1))
+        }
+
+        if (typeof this.result === 'string') {
+            this.expressionInput = []
         }
 
         if (setActive) {
@@ -227,7 +233,7 @@ class Calculator {
 
         if (removedCharacter === '.') {
             this.canAddDecimal = true
-        } else if (Object.values(Operator).includes(<Operator>removedCharacter)) {
+        } else if (isOperator(removedCharacter)) {
             this.canAddOperator = true
         }
 
@@ -237,8 +243,12 @@ class Calculator {
             this.expressionInput.pop()
         }
 
+        if (this.expressionInput.length === 0) {
+            this.expressionInput = ['0']
+        }
+
         lastItem = this.expressionInput[this.expressionInput.length - 1]
-        if (lastItem.length === 1 && Object.values(Operator).includes(<Operator>lastItem)) {
+        if (lastItem.length === 1 && isOperator(lastItem)) {
             this.canAddOperator = false
         }
 
