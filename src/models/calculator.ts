@@ -170,14 +170,15 @@ class Calculator {
         if (!this.expressionDisplay.textContent) return
         
         if (this.expressionDisplay.textContent.length >= MAX_CHARACTERS) return
-
-        if (this.activeDisplay === this.resultDisplay) {
+        
+        this.polarity = 1
+        if (this.activeDisplay === this.resultDisplay && typeof this.result === 'number') {
             this.expressionInput = [this.result.toString()]
+            if (this.result < 0) this.polarity = -1
             this.result = ''
         }
 
         this.expressionInput.push(<Operator>inputOperator)
-        this.polarity = 1
         this.canAddDecimal = true
         this.canAddOperator = false
         this.updateDisplay(this.expressionDisplay)
