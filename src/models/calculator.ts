@@ -267,8 +267,8 @@ class Calculator {
             this.canAddOperator = true
         }
 
-        if (this.expressionInput[this.expressionInput.length - 1].length > 1) {
-            this.expressionInput[this.expressionInput.length - 1] = this.expressionInput[this.expressionInput.length - 1].slice(0, -1)
+        if (lastItem.length > 1) {
+            this.expressionInput[this.expressionInput.length - 1] = lastItem.slice(0, -1)
         } else {
             this.expressionInput.pop()
         }
@@ -280,6 +280,9 @@ class Calculator {
         lastItem = this.expressionInput[this.expressionInput.length - 1]
         if (lastItem.length === 1 && isOperator(lastItem)) {
             this.canAddOperator = false
+            this.result = ''
+        } else if (!isNaN(Number(lastItem)) && this.expressionInput.length > 1) {
+            this.displayResult(false)
         }
 
         this.updateDisplay(this.expressionDisplay)
