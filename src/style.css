@@ -101,13 +101,12 @@ button:target {
 .display__section {
   font-size: 1rem;
   color: var(--dark-grey);
-  transition: all 0.5s;
+  transition: all 0.1s;
 }
 
 .display__section--active {
   font-size: 1.3rem;
   color: var(--darker-grey);
-  transition: all 0.5s;
 }
 
 .keypad {

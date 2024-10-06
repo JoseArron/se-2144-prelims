@@ -1,4 +1,5 @@
-import { Operators } from "./enums"
+import { Operator } from "./enums"
 
-export type Expression = (Operators | number)[]
+export type Expression = (Operator | number)[]
+export type ExpressionInput = (Operator | string)[]
 export type Result = number | string
