@@ -144,9 +144,8 @@ class Calculator {
 
     appendNumber(inputNumber: string): void {
         if (!this.expressionDisplay.textContent) return
-
         if (this.expressionDisplay.textContent.length >= MAX_CHARACTERS) return
-        
+
         if (this.expressionInput[this.expressionInput.length - 1].startsWith('0') && this.expressionInput[this.expressionInput.length - 1].length === 1) {
             this.expressionInput[this.expressionInput.length - 1] = inputNumber
         } else if (!this.canAddOperator && this.polarity === -1) {
@@ -168,11 +167,12 @@ class Calculator {
 
     appendOperator(inputOperator: string): void {
         if (!this.expressionDisplay.textContent) return
-        
         if (this.expressionDisplay.textContent.length >= MAX_CHARACTERS) return
         
         this.polarity = 1
         if (this.activeDisplay === this.resultDisplay && typeof this.result === 'number') {
+            if (!isFinite(this.result)) return
+
             this.expressionInput = [this.result.toString()]
             if (this.result < 0) this.polarity = -1
             this.result = ''
