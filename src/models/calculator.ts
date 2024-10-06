@@ -20,6 +20,7 @@ class Calculator {
     private _expressionInput: ExpressionInput
     private _canAddDecimal: boolean
     private _canAddOperator: boolean
+    private _polarity: number
 
     private _activeDisplay: HTMLDivElement
     displayElement: HTMLDivElement
@@ -33,6 +34,7 @@ class Calculator {
         this._expressionInput = []
         this._canAddDecimal = true
         this._canAddOperator = true
+        this._polarity = 1
         
         this.displayElement = calculatorProps.displayElement
         this.resultDisplay = calculatorProps.resultDisplay
@@ -69,6 +71,10 @@ class Calculator {
         return this._activeDisplay
     }
 
+    private get polarity(): number {
+        return this._polarity
+    }
+
     private set isOn(input: boolean) {
         this._isOn = input
     }
@@ -99,6 +105,10 @@ class Calculator {
         this._activeDisplay.classList.add('display__section--active')
     }
 
+    private set polarity(input: number) {
+        this._polarity = input
+    }
+
     turnOn(): void {
         this.isOn = true
         this.clear()
@@ -124,7 +134,6 @@ class Calculator {
     updateDisplay(activeDisplay: HTMLDivElement): void {
         if (this.isOn) {
             this.activeDisplay = activeDisplay
-            console.log(this.result)
             this.resultDisplay.textContent = this.result.toString()
             this.expressionDisplay.textContent = this.expressionInput.join('')
         } else {
@@ -136,10 +145,13 @@ class Calculator {
     appendNumber(inputNumber: string): void {
         if (!this.expressionDisplay.textContent) return
 
-        if (this.expressionDisplay.textContent.length > MAX_CHARACTERS) return
+        if (this.expressionDisplay.textContent.length >= MAX_CHARACTERS) return
         
         if (this.expressionInput[this.expressionInput.length - 1].startsWith('0') && this.expressionInput[this.expressionInput.length - 1].length === 1) {
             this.expressionInput[this.expressionInput.length - 1] = inputNumber
+        } else if (!this.canAddOperator && this.polarity === -1) {
+            this.expressionInput[this.expressionInput.length - 1] += inputNumber
+            this.canAddOperator = true
         } else if (!this.canAddOperator) {
             this.expressionInput.push(inputNumber)
             this.canAddOperator = true
@@ -157,7 +169,7 @@ class Calculator {
     appendOperator(inputOperator: string): void {
         if (!this.expressionDisplay.textContent) return
         
-        if (this.expressionDisplay.textContent.length > MAX_CHARACTERS) return
+        if (this.expressionDisplay.textContent.length >= MAX_CHARACTERS) return
 
         if (this.activeDisplay === this.resultDisplay) {
             this.expressionInput = [this.result.toString()]
@@ -165,6 +177,21 @@ class Calculator {
         }
 
         this.expressionInput.push(<Operator>inputOperator)
+        this.polarity = 1
+        this.canAddDecimal = true
+        this.canAddOperator = false
+        this.updateDisplay(this.expressionDisplay)
+    }
+
+    appendNegative(): void {
+        if (!this.expressionDisplay.textContent) return
+        
+        if (this.expressionDisplay.textContent.length >= MAX_CHARACTERS) return
+
+        if (this.expressionInput.slice(-2, -1).every((item) => isOperator(item))) return
+
+        this.expressionInput.push(Operator.SUBTRACT)
+        this.polarity = -1
         this.canAddDecimal = true
         this.canAddOperator = false
         this.updateDisplay(this.expressionDisplay)
@@ -173,9 +200,12 @@ class Calculator {
     appendDecimal(): void {
         if (!this.expressionDisplay.textContent) return
 
-        if (this.expressionDisplay.textContent.length > MAX_CHARACTERS) return
+        if (this.expressionDisplay.textContent.length >= MAX_CHARACTERS) return
 
-        if (!this.canAddOperator) {
+        if (!this.canAddOperator && this.polarity === -1) {
+            this.expressionInput[this.expressionInput.length - 1] += '0.'
+            this.canAddOperator = true
+        } else if (!this.canAddOperator) {
             this.expressionInput.push('0.')
             this.canAddOperator = true
         } else {
@@ -184,10 +214,6 @@ class Calculator {
         
         this.canAddDecimal = false
         this.updateDisplay(this.expressionDisplay)
-    }
-
-    appendNegative(): void {
-        console.log("To apply")
     }
 
     displayResult(setActive: boolean): void {
