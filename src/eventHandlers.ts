@@ -24,10 +24,10 @@ export const handleAC = (calculator: Calculator) => {
   }
 
 export const handleEqualInput = (calculator: Calculator) => {
-  if (!calculator.isOn || calculator.isInputDisabled) return
-
+  if (!calculator.isOn || calculator.isInputDisabled || !calculator.canAddOperator) return
+  
   calculator.displayResult(true)
-  }
+  } 
 
 export const handleBackspace = (calculator: Calculator) => {
   if (!calculator.isOn || calculator.isInputDisabled) return
