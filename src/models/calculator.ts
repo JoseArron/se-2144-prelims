@@ -175,8 +175,12 @@ class Calculator {
         if (this.expressionDisplay.textContent.length >= MAX_CHARACTERS) return
 
         // If the last input is just 0, replace it with the new number e.g. ['0'] => ['1']
-        if (this.expressionInput[this.expressionInput.length - 1].startsWith('0') && this.expressionInput[this.expressionInput.length - 1].length === 1) {
+        if (this.expressionInput[this.expressionInput.length - 1] === '0') {
             this.expressionInput[this.expressionInput.length - 1] = inputNumber
+        }
+        // If the last input is just -0, replace it with the new negative number e.g. ['-0'] => ['-1']
+        else if (this.expressionInput[this.expressionInput.length - 1] === '-0') {
+            this.expressionInput[this.expressionInput.length - 1] = '-' + inputNumber
         }
         // If the negative sign has been added, add the number to the last input e.g. ['1', '+', '-'] => ['1', '+', '-1']
         else if (!this.canAddOperator && this.polarity === -1) {
@@ -343,9 +347,9 @@ class Calculator {
             this.expressionInput.pop()
         }
 
-        // If the expression input is empty, reset the expression input
+        // If the expression input is empty, reset the calculator's state
         if (this.expressionInput.length === 0) {
-            this.expressionInput = ['0']
+            this.clear()
         }
 
         lastItem = this.expressionInput[this.expressionInput.length - 1]
