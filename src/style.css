@@ -4,7 +4,6 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
   color: var(--off-white);
   background-color: #242424;
 
@@ -33,6 +32,7 @@ body {
 }
 
 button {
+  color: var(--off-white);
   cursor: pointer;
   display: flex;
   align-items: center;
