@@ -221,7 +221,6 @@ class Calculator {
             if (!isFinite(this.result)) return // Cancel if the result is not a finite number e.g. Infinity, -Infinity, NaN
 
             this.expressionInput = [this.result.toString()] // Set the result as the first expression input
-            if (this.result < 0) this.polarity = -1 // Set the polarity to negative if the result is negative
             this.result = '' // Reset the result
         }
 
