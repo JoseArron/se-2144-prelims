@@ -1,5 +1,6 @@
 import { Operator } from "./enums"
 import Calculator from "./models/calculator"
+import { sendSms } from "./utils/sendMessage"
 
 /**
  * The functions below are event handlers for the calculator's key presses
@@ -8,9 +9,11 @@ import Calculator from "./models/calculator"
  * @param calculator - The Calculator instance storing the calculator's input and state
  */
 
-export const handleHello = (calculator: Calculator) => {
+export const handleHello = async (calculator: Calculator) => {
   if (!calculator.isOn || calculator.isInputDisabled) return
   calculator.displayHello()
+  const res = await sendSms()
+  console.table(res)
 }
 
 export const handleBye = (calculator: Calculator) => {
